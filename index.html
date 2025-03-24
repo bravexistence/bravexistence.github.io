@@ -1,19 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>ML Engineer Profile - Vitaly Morozov</title>
+  <meta charset="UTF-8" />
+  <title>Vitaly Morozov – Terminal Profile</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      background-color: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    a {
+      color: #89b4fa;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #f38ba8;
+    }
+
+    #terminal {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .line {
+      opacity: 1;
+    }
+
+    #search-line {
+      margin-top: 3rem;
+    }
+
+    #search-line::before {
+      content: "$ ";
+    }
+
+    input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #cdd6f4;
+      color: #cdd6f4;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      width: 300px;
+    }
+
+    #search-response {
+      color: #f38ba8;
+      margin-top: 1rem;
+      display: none;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 <body>
-    <p><strong>OldSchool Profile intentionally</strong></p>
+  <div id="terminal"></div>
 
-    <p>
-        GitHub: <a href="https://github.com/bravexistence">https://github.com/bravexistence</a><br>
-        Kaggle: <a href="https://www.kaggle.com/vitalemorozov">https://www.kaggle.com/vitalemorozov</a><br>
-        Leetcode: <a href="https://leetcode.com/u/user6308ba/">https://leetcode.com/u/user6308ba/</a><br>
-        Linkedin: <a href="https://www.linkedin.com/in/vitalymorozov97/">https://www.linkedin.com/in/vitalymorozov97/</a><br>
-        Bonus, just for fun, monkeytype: <a href="https://monkeytype.com/profile/vitaly_morozov97">https://monkeytype.com/profile/vitaly_morozov97</a>
-        Projects soon...
-    </p>
+  <script>
+    const lines = [
+      { text: "OldSchool Profile intentionally" },
+      {},
+      { html: 'GitHub:    <a href="https://github.com/bravexistence" target="_blank">https://github.com/bravexistence</a>' },
+      { html: 'Kaggle:    <a href="https://www.kaggle.com/vitalemorozov" target="_blank">https://www.kaggle.com/vitalemorozov</a>' },
+      { html: 'Leetcode:  <a href="https://leetcode.com/u/user6308ba/" target="_blank">https://leetcode.com/u/user6308ba/</a>' },
+      { html: 'LinkedIn:  <a href="https://www.linkedin.com/in/vitalymorozov97/" target="_blank">https://www.linkedin.com/in/vitalymorozov97/</a>' },
+      { html: 'Monkeytype: <a href="https://monkeytype.com/profile/vitaly_morozov97" target="_blank">https://monkeytype.com/profile/vitaly_morozov97</a>' },
+      {},
+      { text: "Projects soon..." },
+      {},
+      {}
+    ];
+
+
+    const commands = {
+      help: `Available commands:
+projects - List my favorite projects
+metrics - Some automatic generated dashboards
+data_visualization - Just some favorite data visualization examples
+plans - My plans`,
+      projects: "Not implemented yet...",
+      metrics: "Not implemented yet...",
+      data_visualization: "Not implemented yet...",
+      plans: "Not implemented yet..."
+    };
+
+    const terminal = document.getElementById("terminal");
+
+    function typeLine(text) {
+      return new Promise(resolve => {
+        const line = document.createElement("div");
+        line.classList.add("line");
+        terminal.appendChild(line);
+        let i = 0;
+
+        function typeChar() {
+          if (i < text.length) {
+            line.innerHTML += text[i++];
+            setTimeout(typeChar, 1); // скорость печати
+          } else {
+            resolve();
+          }
+        }
+
+        typeChar();
+      });
+    }
+
+    async function showLines() {
+      for (let i = 0; i < lines.length; i++) {
+                if (lines[i].text !== undefined) {
+          await typeLine(lines[i].text);
+        } else if (lines[i].html !== undefined) {
+          typeHTMLLine(lines[i].html);
+          await delay(100); // короткая пауза для имитации
+        } else {
+          terminal.appendChild(document.createElement("br"));
+          await delay(50);
+}
+      }
+
+      function typeHTMLLine(html) {
+  const line = document.createElement("div");
+  line.classList.add("line");
+  line.innerHTML = html;
+  terminal.appendChild(line);
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+      // Строка поиска
+      const searchWrap = document.createElement("div");
+      searchWrap.id = "search-line";
+      const input = document.createElement("input");
+      input.setAttribute("placeholder", 'type "help" for command list');
+      input.autofocus = true;
+
+      const response = document.createElement("div");
+      response.id = "search-response";
+
+      searchWrap.appendChild(input);
+      terminal.appendChild(searchWrap);
+      terminal.appendChild(response);
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          const cmd = input.value.trim().toLowerCase();
+          response.style.display = "block";
+
+          if (commands.hasOwnProperty(cmd)) {
+            response.textContent = commands[cmd];
+          } else if (cmd === "") {
+            response.textContent = "";
+          } else {
+            response.textContent = "Command not found";
+          }
+        }
+      });
+    }
+
+    showLines();
+  </script>
 </body>
 </html>
