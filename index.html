@@ -2,61 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vitaly Morozov – Terminal Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vitaly Morozov — AI Engineer</title>
+
+  <meta name="description" content="Vitaly Morozov — AI Engineer building and operating production LLM systems end-to-end: agents (LangGraph/LangChain), RAG, MCP tool-use, LLM guardrails, and the data/observability infra around them." />
+  <meta name="author" content="Vitaly Morozov" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Vitaly Morozov — AI Engineer" />
+  <meta property="og:description" content="Building & operating production LLM systems end-to-end — agents, RAG, MCP tool-use, guardrails, and the infra around them." />
+  <meta property="og:url" content="https://bravexistence.github.io" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Vitaly Morozov — AI Engineer" />
+  <meta name="twitter:description" content="Building & operating production LLM systems end-to-end — agents, RAG, MCP tool-use, guardrails, and the infra around them." />
+
+  <!-- Favicon: terminal caret, inline SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e1e2e'/%3E%3Ctext x='6' y='23' font-family='monospace' font-size='20' fill='%2389b4fa'%3E%26gt;%3C/text%3E%3Crect x='19' y='9' width='7' height='15' fill='%23a6e3a1'/%3E%3C/svg%3E" />
+
+  <!-- JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- SEO structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Vitaly Morozov",
+    "jobTitle": "AI Engineer",
+    "email": "mailto:vitaly.morozov97@gmail.com",
+    "url": "https://bravexistence.github.io",
+    "sameAs": [
+      "https://github.com/bravexistence",
+      "https://www.kaggle.com/vitalemorozov",
+      "https://leetcode.com/u/user6308ba/",
+      "https://www.linkedin.com/in/vitalymorozov97/"
+    ]
+  }
+  </script>
+
   <style>
+    :root {
+      --bg:      #1e1e2e;
+      --fg:      #cdd6f4;
+      --muted:   #6c7086;
+      --blue:    #89b4fa;
+      --green:   #a6e3a1;
+      --pink:    #f38ba8;
+      --yellow:  #f9e2af;
+      --mauve:   #cba6f7;
+      --teal:    #94e2d5;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      padding: 2rem;
-      background-color: #1e1e2e;
-      color: #cdd6f4;
-      font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 1.1rem;
+      padding: clamp(1rem, 4vw, 2.5rem);
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
+      font-size: clamp(0.95rem, 2.6vw, 1.1rem);
       line-height: 1.6;
-      white-space: pre-wrap;
     }
 
-    a {
-      color: #89b4fa;
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #f38ba8;
-    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--pink); text-decoration: underline; }
 
     #terminal {
-      max-width: 1000px;
+      max-width: 920px;
       margin: 0 auto;
     }
 
-    .line {
-      opacity: 1;
-    }
+    .line { white-space: pre-wrap; overflow-wrap: anywhere; }
+    a { overflow-wrap: anywhere; }
 
-    #search-line {
-      margin-top: 3rem;
+    /* command echo + output history */
+    .echo { color: var(--fg); margin-top: 0.6rem; }
+    .echo .prompt { color: var(--green); }
+    .echo .cmd { color: var(--teal); }
+    .output {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0.15rem 0 0.2rem;
     }
+    .output .h  { color: var(--yellow); font-weight: 700; }
+    .output .k  { color: var(--mauve); }
+    .output .b  { color: var(--blue); }
+    .output .g  { color: var(--green); }
+    .output .m  { color: var(--muted); }
+    .output.err { color: var(--pink); }
 
-    #search-line::before {
-      content: "$ ";
+    /* live prompt line */
+    #prompt-line {
+      display: flex;
+      align-items: center;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
     }
+    #prompt-line .prompt { color: var(--green); margin-right: 0.5rem; }
 
     input {
       background: transparent;
       border: none;
-      border-bottom: 1px solid #cdd6f4;
-      color: #cdd6f4;
+      color: var(--fg);
       font-family: inherit;
-      font-size: 1rem;
+      font-size: inherit;
       outline: none;
-      width: 300px;
+      caret-color: transparent;
+      flex: 1 1 auto;
+      min-width: 120px;
+      padding: 0;
     }
 
-    #search-response {
-      color: #f38ba8;
-      margin-top: 1rem;
-      display: none;
-      white-space: pre-line;
+    /* blinking block cursor */
+    #cursor {
+      display: inline-block;
+      width: 0.6ch;
+      height: 1.15em;
+      background: var(--fg);
+      margin-left: -0.1ch;
+      transform: translateY(0.18em);
+      animation: blink 1.05s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    #hint {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 0.7rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #cursor { animation: none; }
     }
   </style>
 </head>
@@ -64,111 +144,310 @@
   <div id="terminal"></div>
 
   <script>
-    const lines = [
-      { text: "OldSchool Profile intentionally" },
+    "use strict";
+
+    const terminal = document.getElementById("terminal");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ---- links (single source of truth) --------------------------------
+    const links = {
+      github:   "https://github.com/bravexistence",
+      kaggle:   "https://www.kaggle.com/vitalemorozov",
+      leetcode: "https://leetcode.com/u/user6308ba/",
+      linkedin: "https://www.linkedin.com/in/vitalymorozov97/",
+      email:    "vitaly.morozov97@gmail.com"
+    };
+
+    // ---- intro banner ---------------------------------------------------
+    const introLines = [
+      { text: "Vitaly Morozov — AI Engineer" },
+      { html: '<span class="output m">Building & operating production LLM systems end-to-end —</span>' },
+      { html: '<span class="output m">agents (LangGraph/LangChain), RAG, MCP tool-use, guardrails + the infra around them.</span>' },
       {},
-      { html: 'GitHub:    <a href="https://github.com/bravexistence" target="_blank">https://github.com/bravexistence</a>' },
-      { html: 'Kaggle:    <a href="https://www.kaggle.com/vitalemorozov" target="_blank">https://www.kaggle.com/vitalemorozov</a>' },
-      { html: 'Leetcode:  <a href="https://leetcode.com/u/user6308ba/" target="_blank">https://leetcode.com/u/user6308ba/</a>' },
-      { html: 'LinkedIn:  <a href="https://www.linkedin.com/in/vitalymorozov97/" target="_blank">https://www.linkedin.com/in/vitalymorozov97/</a>' },
-      { html: 'Monkeytype: <a href="https://monkeytype.com/profile/vitaly_morozov97" target="_blank">https://monkeytype.com/profile/vitaly_morozov97</a>' },
+      { html: 'GitHub:    <a href="' + links.github   + '" target="_blank" rel="noopener">' + links.github   + '</a>' },
+      { html: 'Kaggle:    <a href="' + links.kaggle   + '" target="_blank" rel="noopener">' + links.kaggle   + '</a>' },
+      { html: 'LeetCode:  <a href="' + links.leetcode + '" target="_blank" rel="noopener">' + links.leetcode + '</a>' },
+      { html: 'LinkedIn:  <a href="' + links.linkedin + '" target="_blank" rel="noopener">' + links.linkedin + '</a>' },
       {},
-      { text: "Projects soon..." },
-      {},
+      { html: '<span class="output m">type </span><span class="output b">help</span><span class="output m"> for the command list</span>' },
       {}
     ];
 
+    // ---- command outputs ------------------------------------------------
+    const H = (s) => '<span class="h">' + s + '</span>';
+    const K = (s) => '<span class="k">' + s + '</span>';
+    const M = (s) => '<span class="m">' + s + '</span>';
+    const G = (s) => '<span class="g">' + s + '</span>';
+    const rule = M("──────────────────────────────────────────────────────────");
 
     const commands = {
-      help: `Available commands:
-projects - List my favorite projects
-metrics - Some automatic generated dashboards
-data_visualization - Just some favorite data visualization examples
-plans - My plans`,
-      projects: "Not implemented yet...",
-      metrics: "Not implemented yet...",
-      data_visualization: "Not implemented yet...",
-      plans: "Not implemented yet..."
+      help:
+        H("Available commands") + "\n" +
+        "  " + K("about")               + "              who I am\n" +
+        "  " + K("experience")          + "         work history (short)\n" +
+        "  " + K("resume") + M(" / ") + K("cv") + "     full CV, printed here\n" +
+        "  " + K("projects")            + "           selected personal projects\n" +
+        "  " + K("skills")              + "             tech stack\n" +
+        "  " + K("contact")             + "            how to reach me\n" +
+        "  " + K("metrics")             + "            " + M("coming soon") + "\n" +
+        "  " + K("data_visualization")  + " " + M("coming soon") + "\n" +
+        "  " + K("plans")               + "              " + M("coming soon") + "\n" +
+        "  " + K("clear")               + "              wipe the screen",
+
+      whoami: "vitaly — AI Engineer, building production LLM systems.",
+
+      about:
+        "I build and operate " + G("production LLM systems") + " end-to-end: agentic\n" +
+        "applications on LangGraph/LangChain, RAG, tool-use via MCP, LLM guardrails,\n" +
+        "and the data & observability infra around them.\n\n" +
+        "I came from data/ML — campaign analytics, gradient boosting, vision-language\n" +
+        "model training — into shipping LLM-based products. Strong Python and SQL;\n" +
+        "comfortable across Kafka, PostgreSQL/Elasticsearch and Docker/Kubernetes.\n\n" +
+        "Now: " + H("AI Engineer @ DAR") + " — LLM features for the Darlean ERP conversational\n" +
+        "assistant (multi-agent routing, tool-calling agents, Daily Brief, RAG on\n" +
+        "Elasticsearch, MCP tools, guardrails, full observability).",
+
+      experience:
+        H("EXPERIENCE") + "\n" +
+        K("AI Engineer @ DAR") + M("  ·  Jan 2026 – present") + "\n" +
+        "  LangGraph/LangChain agents, Daily Brief (APScheduler, TZ-aware), hybrid RAG\n" +
+        "  on Elasticsearch (sparse+dense, RRF), MCP tools + cross-workspace leak fix,\n" +
+        "  LLM guardrails, ~1400 log calls → structured JSON, Helm across 8 envs.\n\n" +
+        K("CVM Data Analyst @ Freedom Finance Bank") + M("  ·  Oct 2024 – Dec 2025") + "\n" +
+        "  Real-time campaign flows (Kafka, up to 30k sends/day), weekly comm-planning\n" +
+        "  in Postgres (up to 3M clients), CTR 1% → 5% via targeting, Power BI.\n\n" +
+        K("ML Engineer @ Horde") + M("  ·  May – Oct 2025") + "\n" +
+        "  End-to-end dataset pipeline for a Kazakh VLM (45k/5k), LLM-as-a-judge QA,\n" +
+        "  fine-tuning + RL post-training. " + G("#1 on Kazakh VLM benchmarks") + "\n" +
+        "  (+12.3% caption, +5.3% VQA); co-authoring an ACL submission.\n\n" +
+        K("Data Analyst @ Eurasian Bank") + M("  ·  May – Oct 2024") + "\n" +
+        "  XGBoost loan-propensity scoring (~3% conversion), Oracle ↔ Power BI ETL.\n\n" +
+        K("Head of Digital Transformation @ Institute of Zoology") + M("  ·  2022 – 2024") + "\n" +
+        "  Maxent species-distribution modeling, Python parsing, Django cadastre.\n\n" +
+        M("→ run ") + K("resume") + M(" for the full CV"),
+
+      skills:
+        H("SKILLS") + "\n" +
+        K("Languages ") + "  Python, SQL\n" +
+        K("LLM / AI  ") + "  LangGraph, LangChain, LangSmith, RAG (hybrid, RRF), MCP / tool-use,\n" +
+        "             LLM guardrails, LLM-as-a-judge, prompt engineering, embeddings,\n" +
+        "             VLM fine-tuning + RL post-training, PyTorch, Transformers, Whisper\n" +
+        K("ML / Data ") + "  scikit-learn, XGBoost, Pandas, A/B testing, feature engineering,\n" +
+        "             NLP (pymorphy3 / simplemma)\n" +
+        K("Backend   ") + "  Flask, FastAPI, aiogram, Telethon, Kafka, RabbitMQ, Redis,\n" +
+        "             Elasticsearch, SQLAlchemy, Pydantic\n" +
+        K("Infra     ") + "  PostgreSQL (+pgvector, JSONB), Docker, Kubernetes, Helm,\n" +
+        "             GitLab CI/CD, TDD, systemd, MinIO, APScheduler\n" +
+        K("Observe   ") + "  Grafana, Loki/LogQL, Prometheus, OpenTelemetry, JSON logging",
+
+      projects:
+        H("SELECTED PROJECTS") + "\n" +
+        K("1. Discourse Intelligence Pipeline") + M("  (private)") + "\n" +
+        "   Monitoring the discourse around AI agents (RU/EN) on Telegram: snowball\n" +
+        "   crawl over the forward/mention graph (Telethon, read-only), rate-limited\n" +
+        "   single-session gateway, Postgres + pgvector, systemd-supervised worker,\n" +
+        "   curation bot.\n\n" +
+        K("2. Multimodal ML / VLM benchmarking") + "\n" +
+        "   Evaluating vision-language models (OCR / VQA / captioning / reasoning /\n" +
+        "   instruction-following); part of the Kazakh multimodal track (horde-research).\n" +
+        "   " + '<a href="https://github.com/bravexistence/kaz-mm" target="_blank" rel="noopener">github.com/bravexistence/kaz-mm</a>' + "\n\n" +
+        K("3. Product backends") + M("  (private)") + "\n" +
+        "   Dating platform (kupidon): FastAPI + RabbitMQ + Redis + MinIO + Elasticsearch.\n" +
+        "   krisha_killer_bot: API + bot + Alembic + Docker.",
+
+      contact:
+        H("CONTACT") + "\n" +
+        "Email:     " + '<a href="mailto:' + links.email + '">' + links.email + '</a>' + "\n" +
+        "GitHub:    " + '<a href="' + links.github   + '" target="_blank" rel="noopener">' + links.github   + '</a>' + "\n" +
+        "Kaggle:    " + '<a href="' + links.kaggle   + '" target="_blank" rel="noopener">' + links.kaggle   + '</a>' + "\n" +
+        "LeetCode:  " + '<a href="' + links.leetcode + '" target="_blank" rel="noopener">' + links.leetcode + '</a>' + "\n" +
+        "LinkedIn:  " + '<a href="' + links.linkedin + '" target="_blank" rel="noopener">' + links.linkedin + '</a>',
+
+      metrics:            M("coming soon — work in progress"),
+      data_visualization: M("coming soon — work in progress"),
+      plans:              M("coming soon — work in progress"),
+
+      ls: K("about/") + "  " + K("experience/") + "  " + K("projects/") + "  " + K("skills/") + "  " + K("contact/")
     };
 
-    const terminal = document.getElementById("terminal");
+    // full CV — printed inline
+    commands.resume =
+      rule + "\n" +
+      H("VITALY MOROZOV") + M("  —  AI Engineer") + "\n" +
+      M(links.email + "  ·  github.com/bravexistence  ·  linkedin.com/in/vitalymorozov97") + "\n" +
+      rule + "\n\n" +
+      H("SUMMARY") + "\n" +
+      "Engineer building and operating production LLM systems end-to-end: agentic\n" +
+      "applications on LangGraph/LangChain, RAG, tool-use via MCP, LLM guardrails, and\n" +
+      "the data and observability infrastructure around them. Came from data/ML into\n" +
+      "shipping LLM-based products. Strong Python and SQL.\n\n" +
+      H("EXPERIENCE") + "\n" +
+      K("AI Engineer @ DAR") + M("  ·  Jan 2026 – present") + "\n" +
+      "  • LLM features for a production conversational-AI assistant (Darlean ERP) on\n" +
+      "    LangGraph/LangChain: multi-agent routing, tool-calling agents, onboarding.\n" +
+      "  • Daily Brief — per-user, timezone-aware daily / end-of-day summaries on\n" +
+      "    schedule (APScheduler, staggered cron); rolled out to staging & prod.\n" +
+      "  • Hybrid RAG over notes/docs on Elasticsearch (sparse + dense, RRF).\n" +
+      "  • MCP tool servers; fixed a cross-workspace data-leak with per-tool scoping,\n" +
+      "    plus OAuth and a feature-flag kill-switch.\n" +
+      "  • LLM guardrails: structural validation + LLM-based prompt-injection detection\n" +
+      "    (benchmarked latency & cost across candidate models).\n" +
+      "  • Observability: AST-based logging audit, ~1400 calls → structured JSON;\n" +
+      "    Prometheus, OpenTelemetry tracing, Grafana/Loki.\n" +
+      "  • Debugged production Kafka pipelines; token-usage billing; Helm × 8 envs.\n\n" +
+      K("CVM Data Analyst @ Freedom Finance Bank") + M("  ·  Oct 2024 – Dec 2025") + "\n" +
+      "  • Real-time & scheduled campaign flows (Kafka ingestion, dedup, throttling) —\n" +
+      "    up to 30k sends/day across 10+ campaigns.\n" +
+      "  • Central weekly communication-planning layer in Postgres (up to 3M clients),\n" +
+      "    resolving overlap, priority and frequency-cap conflicts.\n" +
+      "  • Targeting over mass-broadcast: CTR 1% → 5%; owned the Power BI data layer.\n\n" +
+      K("ML Engineer @ Horde") + M("  ·  May – Oct 2025") + "\n" +
+      "  • End-to-end dataset pipeline for Kazakh VLM training (45k train / 5k test),\n" +
+      "    semi-automatic QA incl. LLM-as-a-judge, leakage-safe splits.\n" +
+      "  • VLM fine-tuning + RL post-training incl. reward-model design.\n" +
+      "  • " + G("#1 on Kazakh VLM benchmarks") + " (+12.3% caption, +5.3% VQA, +5.7% reasoning\n" +
+      "    vs next-best), beating Qwen3-VL-8B, Gemma-3, Llama-3.2-11B. ACL submission.\n\n" +
+      K("Data Analyst @ Eurasian Bank") + M("  ·  May – Oct 2024") + "\n" +
+      "  • XGBoost loan-approval propensity ranking (~3% conversion).\n" +
+      "  • ETL chains (CVM ↔ Oracle ↔ Power BI) with scheduling, alerts, lineage.\n\n" +
+      K("Head of Digital Transformation @ Institute of Zoology") + M("  ·  Jan 2022 – Apr 2024") + "\n" +
+      "  • Maxent species-distribution modeling; Python parsing for a national DB;\n" +
+      "    tech spec + architecture for a Django-based animal cadastre.\n\n" +
+      H("SKILLS") + "\n" +
+      "  Python · SQL · LangGraph · LangChain · LangSmith · RAG · MCP · LLM guardrails ·\n" +
+      "  LLM-as-a-judge · PyTorch · Transformers · VLM fine-tuning · scikit-learn ·\n" +
+      "  XGBoost · Pandas · Kafka · PostgreSQL · Elasticsearch · Redis · Docker ·\n" +
+      "  Kubernetes · Helm · GitLab CI/CD · Grafana · Loki · Prometheus\n\n" +
+      H("LANGUAGES") + "\n" +
+      "  English — B2 (Upper-Intermediate)\n\n" +
+      H("EDUCATION / BACKGROUND") + "\n" +
+      "  Data & ML foundation — campaign analytics, gradient boosting, VLM training.\n\n" +
+      H("CONTACT") + "\n" +
+      "  " + '<a href="mailto:' + links.email + '">' + links.email + '</a>' + "\n" +
+      rule;
+    commands.cv = commands.resume;
+
+    const commandNames = Object.keys(commands).concat(["whoami", "clear"]);
+
+    // ---- rendering ------------------------------------------------------
+    function appendEcho(cmd) {
+      const div = document.createElement("div");
+      div.className = "echo";
+      div.innerHTML = '<span class="prompt">$ </span><span class="cmd">' +
+        cmd.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</span>';
+      terminal.insertBefore(div, promptLine);
+    }
+
+    function appendOutput(html, isError) {
+      const div = document.createElement("div");
+      div.className = "output" + (isError ? " err" : "");
+      div.innerHTML = html;
+      terminal.insertBefore(div, promptLine);
+    }
 
     function typeLine(text) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const line = document.createElement("div");
-        line.classList.add("line");
-        terminal.appendChild(line);
+        line.className = "line";
+        terminal.insertBefore(line, promptLine);
+        if (reduceMotion) { line.textContent = text; return resolve(); }
         let i = 0;
-
-        function typeChar() {
-          if (i < text.length) {
-            line.innerHTML += text[i++];
-            setTimeout(typeChar, 1); // скорость печати
-          } else {
-            resolve();
-          }
-        }
-
-        typeChar();
+        (function step() {
+          if (i < text.length) { line.textContent += text[i++]; setTimeout(step, 8); }
+          else resolve();
+        })();
       });
     }
 
-    async function showLines() {
-      for (let i = 0; i < lines.length; i++) {
-                if (lines[i].text !== undefined) {
-          await typeLine(lines[i].text);
-        } else if (lines[i].html !== undefined) {
-          typeHTMLLine(lines[i].html);
-          await delay(100); // короткая пауза для имитации
-        } else {
-          terminal.appendChild(document.createElement("br"));
-          await delay(50);
-}
+    function addHtmlLine(html) {
+      const line = document.createElement("div");
+      line.className = "line";
+      line.innerHTML = html;
+      terminal.insertBefore(line, promptLine);
+    }
+
+    const delay = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
+
+    // ---- prompt / input (built up front, intro inserts before it) -------
+    const promptLine = document.createElement("div");
+    promptLine.id = "prompt-line";
+    const promptSign = document.createElement("span");
+    promptSign.className = "prompt";
+    promptSign.textContent = "$";
+    const input = document.createElement("input");
+    input.setAttribute("aria-label", "terminal command input");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("spellcheck", "false");
+    const cursor = document.createElement("span");
+    cursor.id = "cursor";
+    promptLine.appendChild(promptSign);
+    promptLine.appendChild(input);
+    promptLine.appendChild(cursor);
+
+    const hint = document.createElement("div");
+    hint.id = "hint";
+    hint.textContent = 'Tab — autocomplete · ↑ ↓ — history · type "help"';
+
+    // ---- command execution ---------------------------------------------
+    const history = [];
+    let historyIdx = -1;
+
+    function runCommand(raw) {
+      const cmd = raw.trim();
+      appendEcho(cmd);
+      if (cmd === "") { /* just a blank prompt */ }
+      else if (cmd.toLowerCase() === "clear") {
+        document.querySelectorAll(".echo, .output").forEach((n) => n.remove());
+      } else if (Object.prototype.hasOwnProperty.call(commands, cmd.toLowerCase())) {
+        appendOutput(commands[cmd.toLowerCase()], false);
+      } else {
+        appendOutput("command not found: " + cmd.replace(/</g, "&lt;") +
+          '  ·  try ' + K("help"), true);
       }
-
-      function typeHTMLLine(html) {
-  const line = document.createElement("div");
-  line.classList.add("line");
-  line.innerHTML = html;
-  terminal.appendChild(line);
-}
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-
-      // Строка поиска
-      const searchWrap = document.createElement("div");
-      searchWrap.id = "search-line";
-      const input = document.createElement("input");
-      input.setAttribute("placeholder", 'type "help" for command list');
-      input.autofocus = true;
-
-      const response = document.createElement("div");
-      response.id = "search-response";
-
-      searchWrap.appendChild(input);
-      terminal.appendChild(searchWrap);
-      terminal.appendChild(response);
-
-      input.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-          const cmd = input.value.trim().toLowerCase();
-          response.style.display = "block";
-
-          if (commands.hasOwnProperty(cmd)) {
-            response.textContent = commands[cmd];
-          } else if (cmd === "") {
-            response.textContent = "";
-          } else {
-            response.textContent = "Command not found";
-          }
-        }
-      });
+      if (cmd !== "") { history.push(cmd); }
+      historyIdx = history.length;
+      cursor.scrollIntoView({ block: "nearest" });
     }
 
-    showLines();
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        runCommand(input.value);
+        input.value = "";
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (history.length && historyIdx > 0) { historyIdx--; input.value = history[historyIdx]; }
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (historyIdx < history.length - 1) { historyIdx++; input.value = history[historyIdx]; }
+        else { historyIdx = history.length; input.value = ""; }
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        const frag = input.value.trim().toLowerCase();
+        if (!frag) return;
+        const matches = commandNames.filter((c) => c.startsWith(frag));
+        if (matches.length === 1) input.value = matches[0];
+        else if (matches.length > 1) { appendEcho(input.value); appendOutput(matches.map(K).join("  "), false); }
+      }
+    });
+
+    // keep focus on the input when clicking anywhere
+    document.addEventListener("click", () => {
+      if (window.getSelection().toString() === "") input.focus();
+    });
+
+    // ---- boot -----------------------------------------------------------
+    async function boot() {
+      terminal.appendChild(promptLine);
+      for (const l of introLines) {
+        if (l.text !== undefined) await typeLine(l.text);
+        else if (l.html !== undefined) { addHtmlLine(l.html); await delay(60); }
+        else { terminal.insertBefore(document.createElement("br"), promptLine); await delay(40); }
+      }
+      terminal.appendChild(hint);
+      input.focus();
+    }
+
+    boot();
   </script>
 </body>
 </html>
