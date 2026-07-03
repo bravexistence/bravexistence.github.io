@@ -38,7 +38,8 @@
       "https://github.com/bravexistence",
       "https://www.kaggle.com/vitalemorozov",
       "https://leetcode.com/u/user6308ba/",
-      "https://www.linkedin.com/in/vitalymorozov97/"
+      "https://www.linkedin.com/in/vitalymorozov97/",
+      "https://t.me/genesis_vit"
     ]
   }
   </script>
@@ -112,18 +113,28 @@
       font-size: inherit;
       outline: none;
       caret-color: transparent;
-      flex: 1 1 auto;
-      min-width: 120px;
+      flex: 0 1 auto;
+      width: 1ch;
+      max-width: 100%;
       padding: 0;
     }
 
-    /* blinking block cursor */
+    /* hidden element used only to measure the typed text's rendered width */
+    #measure {
+      position: absolute;
+      visibility: hidden;
+      white-space: pre;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* blinking block cursor — sits right after the typed text */
     #cursor {
       display: inline-block;
       width: 0.6ch;
       height: 1.15em;
       background: var(--fg);
-      margin-left: -0.1ch;
+      flex: 0 0 auto;
       transform: translateY(0.18em);
       animation: blink 1.05s steps(1) infinite;
     }
@@ -155,6 +166,7 @@
       kaggle:   "https://www.kaggle.com/vitalemorozov",
       leetcode: "https://leetcode.com/u/user6308ba/",
       linkedin: "https://www.linkedin.com/in/vitalymorozov97/",
+      telegram: "https://t.me/genesis_vit",
       email:    "vitaly.morozov97@gmail.com"
     };
 
@@ -168,6 +180,7 @@
       { html: 'Kaggle:    <a href="' + links.kaggle   + '" target="_blank" rel="noopener">' + links.kaggle   + '</a>' },
       { html: 'LeetCode:  <a href="' + links.leetcode + '" target="_blank" rel="noopener">' + links.leetcode + '</a>' },
       { html: 'LinkedIn:  <a href="' + links.linkedin + '" target="_blank" rel="noopener">' + links.linkedin + '</a>' },
+      { html: 'Telegram:  <a href="' + links.telegram + '" target="_blank" rel="noopener">' + links.telegram + '</a>' },
       {},
       { html: '<span class="output m">type </span><span class="output b">help</span><span class="output m"> for the command list</span>' },
       {}
@@ -261,7 +274,8 @@
         "GitHub:    " + '<a href="' + links.github   + '" target="_blank" rel="noopener">' + links.github   + '</a>' + "\n" +
         "Kaggle:    " + '<a href="' + links.kaggle   + '" target="_blank" rel="noopener">' + links.kaggle   + '</a>' + "\n" +
         "LeetCode:  " + '<a href="' + links.leetcode + '" target="_blank" rel="noopener">' + links.leetcode + '</a>' + "\n" +
-        "LinkedIn:  " + '<a href="' + links.linkedin + '" target="_blank" rel="noopener">' + links.linkedin + '</a>',
+        "LinkedIn:  " + '<a href="' + links.linkedin + '" target="_blank" rel="noopener">' + links.linkedin + '</a>' + "\n" +
+        "Telegram:  " + '<a href="' + links.telegram + '" target="_blank" rel="noopener">' + links.telegram + '</a>',
 
       metrics:            M("coming soon — work in progress"),
       data_visualization: M("coming soon — work in progress"),
@@ -274,7 +288,7 @@
     commands.resume =
       rule + "\n" +
       H("VITALY MOROZOV") + M("  —  AI Engineer") + "\n" +
-      M(links.email + "  ·  github.com/bravexistence  ·  linkedin.com/in/vitalymorozov97") + "\n" +
+      M(links.email + "  ·  github.com/bravexistence  ·  linkedin.com/in/vitalymorozov97  ·  t.me/genesis_vit") + "\n" +
       rule + "\n\n" +
       H("SUMMARY") + "\n" +
       "Engineer building and operating production LLM systems end-to-end: agentic\n" +
@@ -324,6 +338,7 @@
       "  Data & ML foundation — campaign analytics, gradient boosting, VLM training.\n\n" +
       H("CONTACT") + "\n" +
       "  " + '<a href="mailto:' + links.email + '">' + links.email + '</a>' + "\n" +
+      "  " + '<a href="' + links.telegram + '" target="_blank" rel="noopener">' + links.telegram + '</a>' + "\n" +
       rule;
     commands.cv = commands.resume;
 
@@ -380,9 +395,20 @@
     input.setAttribute("spellcheck", "false");
     const cursor = document.createElement("span");
     cursor.id = "cursor";
+    const measure = document.createElement("span");
+    measure.id = "measure";
     promptLine.appendChild(promptSign);
     promptLine.appendChild(input);
     promptLine.appendChild(cursor);
+    document.body.appendChild(measure);
+
+    // keep the input exactly as wide as its typed text, so the block
+    // cursor sits right after the last character instead of drifting
+    // to the far right of the line
+    function syncInputWidth() {
+      measure.textContent = input.value || "";
+      input.style.width = Math.max(measure.offsetWidth, 1) + "px";
+    }
 
     const hint = document.createElement("div");
     hint.id = "hint";
@@ -409,6 +435,8 @@
       cursor.scrollIntoView({ block: "nearest" });
     }
 
+    input.addEventListener("input", syncInputWidth);
+
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         runCommand(input.value);
@@ -428,6 +456,7 @@
         if (matches.length === 1) input.value = matches[0];
         else if (matches.length > 1) { appendEcho(input.value); appendOutput(matches.map(K).join("  "), false); }
       }
+      syncInputWidth();
     });
 
     // keep focus on the input when clicking anywhere
@@ -444,6 +473,7 @@
         else { terminal.insertBefore(document.createElement("br"), promptLine); await delay(40); }
       }
       terminal.appendChild(hint);
+      syncInputWidth();
       input.focus();
     }
 
